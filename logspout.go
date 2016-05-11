@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/tabwriter"
 
@@ -32,6 +33,18 @@ func main() {
 	if getopt("DEBUG", "") != "" {
 		fmt.Printf("debug:%s ", getopt("DEBUG", ""))
 	}
+
+	routesPath := getopt("ROUTESPATH", "")
+	if routesPath == "" {
+		defaultDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+
+		os.Setenv("ROUTESPATH", defaultDir)
+	}
+
 	fmt.Printf("persist:%s\n", getopt("ROUTESPATH", "/mnt/routes"))
 
 	var jobs []string
@@ -57,7 +70,7 @@ func main() {
 			fmt.Fprintf(w, "#   %s\t%s\t%s\t%s\t%s\n",
 				route.Adapter,
 				route.Address,
-				route.FilterID+route.FilterName,
+				route.FilterID + route.FilterName,
 				strings.Join(route.FilterSources, ","),
 				route.Options)
 		}

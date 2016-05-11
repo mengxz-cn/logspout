@@ -35,7 +35,10 @@ func (rm *RouteManager) Load(persistor RouteStore) error {
 		return err
 	}
 	for _, route := range routes {
-		rm.Add(route)
+		err = rm.Add(route)
+		if err != nil {
+			return err
+		}
 	}
 	rm.persistor = persistor
 	return nil

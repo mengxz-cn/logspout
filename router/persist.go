@@ -39,6 +39,8 @@ func (fs RouteFileStore) GetAll() ([]*Route, error) {
 			route, err := fs.Get(fileparts[0])
 			if err == nil {
 				routes = append(routes, route)
+			} else {
+				return nil, err
 			}
 		}
 	}
